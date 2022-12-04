@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <title>Music Database</title>
@@ -42,7 +41,7 @@
                   <input type="text" class="form-control" placeholder="Date Formed (YYYY-MM-DD)" name="dateFormed">
                 </div>
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="Date ended (YYYY-MM-DD)" name="dateEnded">
+                  <input type="text" class="form-control" placeholder="Date ended (YYYY-MM-DD) this can be left empty" name="dateEnded">
                 </div>
                 <div class="col">
                   <input type="text" class="form-control" placeholder="Genre" name="genre">
@@ -69,7 +68,7 @@
                   <input type="text" class="form-control" placeholder="Date Formed (YYYY-MM-DD)" name="dateFormed">
                 </div>
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="Date ended (YYYY-MM-DD)" name="dateEnded">
+                  <input type="text" class="form-control" placeholder="Date ended (YYYY-MM-DD) this can be left empty" name="dateEnded">
                 </div>
                 <div class="col">
                   <input type="text" class="form-control" placeholder="Genre" name="genre">
@@ -98,18 +97,39 @@
             $dateFormed = trim($_POST['dateFormed']);
             $dateEnded = trim($_POST['dateEnded']);
             $genre = trim($_POST['genre']);
-            addArtist($artistName, $dateFormed, $dateEnded, $genre);
+            if((!isset($artistName) || $artistName == '') || (!isset($dateFormed) || $dateFormed == '') || (!isset($genre) || $genre == '')){
+              $message = "You need a value for each field! Please follow the format!";
+              echo $message;
+            }else{
+              if(!isset($dateEnded) || $dateEnded == ''){
+                $dateEnded = NULL;
+              }
+              addArtist($artistName, $dateFormed, $dateEnded, $genre);
+            }
           }
           if(isset($_POST['delete'])){
             $artistName = trim($_POST['artistName']);
-            deleteArtist($artistName);
+            if(!isset($artistName) || $artistName == ''){
+              $message = "You need a value for each field! Please follow the format!";
+              echo $message;
+            }else{
+              deleteArtist($artistName);
+            }
           }
           if(isset($_POST['update'])){
             $artistName = trim($_POST['artistName']);
             $dateFormed = trim($_POST['dateFormed']);
             $dateEnded = trim($_POST['dateEnded']);
             $genre = trim($_POST['genre']);
-            updateArtist($artistName, $dateFormed, $dateEnded, $genre);
+            if((!isset($artistName) || $artistName == '') || (!isset($dateFormed) || $dateFormed == '') || (!isset($genre) || $genre == '')){
+              $message = "You need a value for each field! Please follow the format!";
+              echo $message;
+            }else{
+              if(!isset($dateEnded) || $dateEnded == ''){
+                $dateEnded = NULL;
+              }
+              updateArtist($artistName, $dateFormed, $dateEnded, $genre);
+            }
           }    
 
           function addArtist($artistName, $dateFormed, $dateEnded, $genre){
@@ -136,13 +156,6 @@
 
           function updateArtist($artistName, $dateFormed, $dateEnded, $genre){
             $pdo = grabPdo();
-            /**$query = "SELECT ArtistID FROM Artist WHERE Name = :name";
-            
-            $statement = $pdo->prepare($query);
-            $statement->bindValue('name', $artistName);
-            $id = $statement->execute();
-
-            echo $statement->execute();*/
 
             $updateQuery = "UPDATE Artist SET Name = :name, DateFormed = :dateformed, DateEnded = :dateended, Genre = :genre WHERE Name = :name";
 
@@ -151,7 +164,6 @@
             $statement->bindValue('dateformed', $dateFormed);
             $statement->bindValue('dateended', $dateEnded);
             $statement->bindValue('genre', $genre);
-            //$statement->bindValue('id', $id);
             $statement->execute();
           }
 
@@ -168,7 +180,8 @@
                   <h5 class='card-title'>".$row['ArtistName']."</h5>
                   <h6 class='card-subtitle mb-2 text-muted'>".$row['Genre']."</h6>";
               if($row['DateEnded'] == NULL){
-                echo "<h6 class='card-subtitle mb-2 text-muted'>Still Active</h6>
+                echo "<h6 class='card-subtitle mb-2 text-muted'>Formed: ".$row['DateFormed']."</h6>
+                <h6 class='card-subtitle mb-2 text-muted'>Still Active</h6>
                 </div>
                 </div>";
               }else{
