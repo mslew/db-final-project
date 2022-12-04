@@ -42,30 +42,30 @@
                   <input type="text" class="form-control" placeholder="Song Name" name="songName">
                 </div>
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="Length (M-SS-MS)" name="releaseDate">
+                  <input type="text" class="form-control" placeholder="Length (MM:SS:MS)" name="length">
                 </div>
-              <button id="addAlbum"class="mt-2 mb-5" name="add">Add Album</button>
+              <button id="addSong"class="mt-2 mb-5" name="add">Add Song</button>
             </form>
           </div>
           <div class="col">
-          <p>Delete Album by Name</p>
+          <p>Delete Song by Name</p>
               <form class="mb-2" method="post" action="songs.php">
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="Album Name" name="albumName">
+                  <input type="text" class="form-control" placeholder="Song Name" name="songName">
                 </div>
-              <button id="deleteAlbum"class="mt-2 mb-5" name="delete">Delete Album</button>
+              <button id="deleteSong"class="mt-2 mb-5" name="delete">Delete Song</button>
             </form>
           </div>
           <div class="col">
-          <p>Update Album</p>
+          <p>Update Song</p>
             <form class="mb-2" method="post" action="songs.php">
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="Album Name" name="albumName">
+                  <input type="text" class="form-control" placeholder="Song Name" name="songName">
                 </div>
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="Release Date (YYYY-MM-DD)" name="releaseDate">
+                  <input type="text" class="form-control" placeholder="Length (MM:SS:MS)" name="length">
                 </div>
-              <button id="updateAlbum"class="mt-2 mb-5" name="update">Update Album</button>
+              <button id="updateSong"class="mt-2 mb-5" name="update">Update Song</button>
             </form>
           </div>
         </div>
@@ -85,69 +85,62 @@
           }
 
           if(isset($_POST['add'])){
-            $artistName = trim($_POST['artistName']);
             $albumName = trim($_POST['albumName']);
-            $releaseDate = trim($_POST['releaseDate']);
-            addAlbum($artistName, $albumName, $releaseDate);
+            $songName = trim($_POST['songName']);
+            $length = trim($_POST['length']);
+            addSong($albumName, $songName, $length);
           }
           if(isset($_POST['delete'])){
-            $albumName = trim($_POST['albumName']);
-            deleteAlbum($albumName);
+            $songName = trim($_POST['songName']);
+            deleteSong($songName);
           }
           if(isset($_POST['update'])){
-            $albumName = trim($_POST['albumName']);
-            $releaseDate = trim($_POST['releaseDate']);
-            updateAlbum($albumName, $releaseDate);
+            $songName = trim($_POST['songName']);
+            $length = trim($_POST['length']);
+            updateSong($songName, $length);
           }    
 
-          function addAlbum($artistName, $albumName, $releaseDate){
+          function addSong($albumName, $songName, $length){
             $pdo = grabPdo();
-            $query = "INSERT INTO Album (Name, ReleaseDate) " .
-                      "VALUES(?, ?)" ;
+            $query = "INSERT INTO SONG (AlbumID, Name, Length) " .
+                      "VALUES((SELECT AlbumID FROM ALBUM WHERE Name = :albumName), :name, :length)" ;
 
             $statement = $pdo->prepare($query);
-            $statement->bindValue(1, $albumName);
-            $statement->bindValue(2, $releaseDate);
-            $statement->execute();
-
-            $query = "INSERT INTO ArtistAlbum (ArtistID, AlbumID) " .
-                      "VALUES((SELECT ArtistID FROM Artist WHERE Name = :artistName), (SELECT AlbumID FROM Album WHERE Name = :albumName))" ;
-
-            $statement = $pdo->prepare($query);
-            $statement->bindValue('artistName', $artistName);
             $statement->bindValue('albumName', $albumName);
+            $statement->bindValue('name', $songName);
+            $statement->bindValue('length', $length);
             $statement->execute();
           }
 
-          function deleteAlbum($albumName){
+          function deleteSong($songName){
             $pdo = grabPdo();
-            $query = "DELETE FROM Album WHERE Name = :name";
+            $query = "DELETE FROM Song WHERE Name = :name";
 
             $statement = $pdo->prepare($query);
-            $statement->bindValue('name', $albumName);
+            $statement->bindValue('name', $songName);
             $statement->execute();
           }
 
-          function updateAlbum($albumName, $releaseDate){
+          function updateSong($songName, $length){
             $pdo = grabPdo();
 
-            $updateQuery = "UPDATE Album SET Name = :name, ReleaseDate = :releaseDate WHERE Name = :name";
+            $updateQuery = "UPDATE Song SET Name = :name, Length = :length WHERE Name = :name";
 
             $statement = $pdo->prepare($updateQuery);
-            $statement->bindValue('name', $albumName);
-            $statement->bindValue('releaseDate', $releaseDate);
+            $statement->bindValue('name', $songName);
+            $statement->bindValue('length', $length);
             $statement->execute();
           }
 
           function displayAll(){
             $pdo = grabPdo();
-            $query = "SELECT * FROM Album";
+            $query = "SELECT * FROM Song";
             $statement = $pdo->query($query);
             //echo "Rows selected = ".$statement->rowCount();
             echo "<ul class='list-group'>";
 
             while($row = $statement->fetch()){
-                echo "<li class='list-group-item'>".$row['Name']." ".$row['ReleaseDate']." </li>";
+                echo "<li class='list-group-item'>".$row['Name']." ".$row['Length']." </li>";
             }
             echo "</ul>";
           }
