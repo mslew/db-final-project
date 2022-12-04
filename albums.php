@@ -88,16 +88,31 @@
             $artistName = trim($_POST['artistName']);
             $albumName = trim($_POST['albumName']);
             $releaseDate = trim($_POST['releaseDate']);
-            addAlbum($artistName, $albumName, $releaseDate);
+            if((!isset($artistName) || $artistName == '') || (!isset($albumName) || $albumName == '') || (!isset($releaseDate) || $releaseDate == '')){
+              $message = "You need a value for each field! Please follow the format!";
+              echo $message;
+            }else{
+              addAlbum($artistName, $albumName, $releaseDate);
+            }
           }
           if(isset($_POST['delete'])){
             $albumName = trim($_POST['albumName']);
-            deleteAlbum($albumName);
+            if(!isset($albumName) || $albumName == ''){
+              $message = "You need a value for each field! Please follow the format!";
+              echo $message;
+            }else{
+              deleteAlbum($albumName);
+            }
           }
           if(isset($_POST['update'])){
             $albumName = trim($_POST['albumName']);
             $releaseDate = trim($_POST['releaseDate']);
-            updateAlbum($albumName, $releaseDate);
+            if((!isset($albumName) || $albumName == '') || (!isset($releaseDate) || $releaseDate == '')){
+              $message = "You need a value for each field! Please follow the format!";
+              echo $message;
+            }else{
+              updateAlbum($albumName, $releaseDate);
+            }
           }    
 
           function addAlbum($artistName, $albumName, $releaseDate){
@@ -150,7 +165,7 @@
               <div class='card-body'>
                   <h5 class='card-title'>".$row['AlbumName']."</h5>
                   <h6 class='card-subtitle mb-2 text-muted'>".$row['ArtistName']."</h6>
-                  <h6 class='card-subtitle mb-2 text-muted'>".$row['ReleaseDate']."</h6>
+                  <h6 class='card-subtitle mb-2 text-muted'>Release Date: ".$row['ReleaseDate']."</h6>
                 </div>
               </div>";
             }
