@@ -36,6 +36,7 @@
           <p>Add New Song</p>
             <form class="mb-2" method="post" action="songs.php">
                 <div class="col">
+                <i>Please make sure the album exists in the database!</i>
                   <input type="text" class="form-control" placeholder="Album Name" name="albumName">
                 </div>
                 <div class="col">
@@ -88,16 +89,31 @@
             $albumName = trim($_POST['albumName']);
             $songName = trim($_POST['songName']);
             $length = trim($_POST['length']);
-            addSong($albumName, $songName, $length);
+            if((!isset($albumName) || $albumName == '') || (!isset($songName) || $songName == '') || (!isset($length) || $length == '')){
+              $message = "You need a value for each field! Please follow the format!";
+              echo $message;
+            }else{
+              addSong($albumName, $songName, $length);
+            }
           }
           if(isset($_POST['delete'])){
             $songName = trim($_POST['songName']);
-            deleteSong($songName);
+            if(!isset($songName) || $songName == ''){
+              $message = "You need a value for each field! Please follow the format!";
+              echo $message;
+            }else{
+              deleteSong($songName);
+            }
           }
           if(isset($_POST['update'])){
             $songName = trim($_POST['songName']);
             $length = trim($_POST['length']);
-            updateSong($songName, $length);
+            if((!isset($songName) || $songName == '') || (!isset($length) || $length == '')){
+              $message = "You need a value for each field! Please follow the format!";
+              echo $message;
+            }else{
+              updateSong($songName, $length);
+            }
           }    
 
           function addSong($albumName, $songName, $length){

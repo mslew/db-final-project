@@ -36,6 +36,7 @@
           <p>Add New Album</p>
             <form class="mb-2" method="post" action="albums.php">
                 <div class="col">
+                  <i>Please make sure the artist exists in the database!</i>
                   <input type="text" class="form-control" placeholder="Artist Name" name="artistName">
                 </div>
                 <div class="col">
