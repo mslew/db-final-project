@@ -47,7 +47,7 @@
                 <div class="col">
                   <input type="text" class="form-control" placeholder="Genre" name="genre">
                 </div>
-              <button id="updateArtist"class="mt-2 mb-5" name="add">Add Artist</button>
+              <button id="addArtist"class="mt-2 mb-5" name="add">Add Artist</button>
             </form>
           </div>
           <div class="col">
@@ -56,7 +56,7 @@
                 <div class="col">
                   <input type="text" class="form-control" placeholder="Artist Name" name="artistName">
                 </div>
-              <button id="updateArtist"class="mt-2 mb-5" name="delete">Delete Artist</button>
+              <button id="deleteArtist"class="mt-2 mb-5" name="delete">Delete Artist</button>
             </form>
           </div>
           <div class="col">
@@ -77,9 +77,6 @@
               <button id="updateArtist"class="mt-2 mb-5" name="update">Update Artist</button>
             </form>
           </div>
-          <?php
-            
-          ?>
         </div>
         <div class="container">
         <?php

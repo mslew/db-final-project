@@ -30,31 +30,129 @@
     </div>
   </nav>
     <div class="container-fluid">
-        <h1 class="display-5">Songs</h1>
+        <h1 class="display-3">Songs</h1>
+        <div class="row">
+          <div class="col">
+          <p>Add New Song</p>
+            <form class="mb-2" method="post" action="songs.php">
+                <div class="col">
+                  <input type="text" class="form-control" placeholder="Album Name" name="albumName">
+                </div>
+                <div class="col">
+                  <input type="text" class="form-control" placeholder="Song Name" name="songName">
+                </div>
+                <div class="col">
+                  <input type="text" class="form-control" placeholder="Length (M-SS-MS)" name="releaseDate">
+                </div>
+              <button id="addAlbum"class="mt-2 mb-5" name="add">Add Album</button>
+            </form>
+          </div>
+          <div class="col">
+          <p>Delete Album by Name</p>
+              <form class="mb-2" method="post" action="songs.php">
+                <div class="col">
+                  <input type="text" class="form-control" placeholder="Album Name" name="albumName">
+                </div>
+              <button id="deleteAlbum"class="mt-2 mb-5" name="delete">Delete Album</button>
+            </form>
+          </div>
+          <div class="col">
+          <p>Update Album</p>
+            <form class="mb-2" method="post" action="songs.php">
+                <div class="col">
+                  <input type="text" class="form-control" placeholder="Album Name" name="albumName">
+                </div>
+                <div class="col">
+                  <input type="text" class="form-control" placeholder="Release Date (YYYY-MM-DD)" name="releaseDate">
+                </div>
+              <button id="updateAlbum"class="mt-2 mb-5" name="update">Update Album</button>
+            </form>
+          </div>
+        </div>
+        <div class="container">
         <?php
+          function grabPdo(){
             $user = "php_user";
             $pass = "secure_password";
             $dsn = "mysql:host=127.0.0.1;dbname=music";
-
             try{
-                $pdo = new PDO($dsn, $user, $pass);
+              $pdo = new PDO($dsn, $user, $pass);
+              return $pdo;
             }catch(PDOException $e){
-                echo $e->getMessage();
-                die;
+              echo $e->getMessage();
+              die;
             }
+          }
 
-            $query = "SELECT * FROM Song";
+          if(isset($_POST['add'])){
+            $artistName = trim($_POST['artistName']);
+            $albumName = trim($_POST['albumName']);
+            $releaseDate = trim($_POST['releaseDate']);
+            addAlbum($artistName, $albumName, $releaseDate);
+          }
+          if(isset($_POST['delete'])){
+            $albumName = trim($_POST['albumName']);
+            deleteAlbum($albumName);
+          }
+          if(isset($_POST['update'])){
+            $albumName = trim($_POST['albumName']);
+            $releaseDate = trim($_POST['releaseDate']);
+            updateAlbum($albumName, $releaseDate);
+          }    
+
+          function addAlbum($artistName, $albumName, $releaseDate){
+            $pdo = grabPdo();
+            $query = "INSERT INTO Album (Name, ReleaseDate) " .
+                      "VALUES(?, ?)" ;
+
+            $statement = $pdo->prepare($query);
+            $statement->bindValue(1, $albumName);
+            $statement->bindValue(2, $releaseDate);
+            $statement->execute();
+
+            $query = "INSERT INTO ArtistAlbum (ArtistID, AlbumID) " .
+                      "VALUES((SELECT ArtistID FROM Artist WHERE Name = :artistName), (SELECT AlbumID FROM Album WHERE Name = :albumName))" ;
+
+            $statement = $pdo->prepare($query);
+            $statement->bindValue('artistName', $artistName);
+            $statement->bindValue('albumName', $albumName);
+            $statement->execute();
+          }
+
+          function deleteAlbum($albumName){
+            $pdo = grabPdo();
+            $query = "DELETE FROM Album WHERE Name = :name";
+
+            $statement = $pdo->prepare($query);
+            $statement->bindValue('name', $albumName);
+            $statement->execute();
+          }
+
+          function updateAlbum($albumName, $releaseDate){
+            $pdo = grabPdo();
+
+            $updateQuery = "UPDATE Album SET Name = :name, ReleaseDate = :releaseDate WHERE Name = :name";
+
+            $statement = $pdo->prepare($updateQuery);
+            $statement->bindValue('name', $albumName);
+            $statement->bindValue('releaseDate', $releaseDate);
+            $statement->execute();
+          }
+
+          function displayAll(){
+            $pdo = grabPdo();
+            $query = "SELECT * FROM Album";
             $statement = $pdo->query($query);
-
             //echo "Rows selected = ".$statement->rowCount();
-
             echo "<ul class='list-group'>";
 
             while($row = $statement->fetch()){
-                echo "<li class='list-group-item'>".$row['Name']." ".$row['Length']."</li>";
+                echo "<li class='list-group-item'>".$row['Name']." ".$row['ReleaseDate']." </li>";
             }
-
             echo "</ul>";
+          }
+          displayAll();
         ?>
+        </div>
     </div>
 </body>
