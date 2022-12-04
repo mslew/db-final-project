@@ -136,11 +136,18 @@
 
           function deleteAlbum($albumName){
             $pdo = grabPdo();
+            $query = "DELETE aa.AlbumID FROM ArtistAlbum aa JOIN Album a aa.AlbumID = a.AlbumID WHERE a.Name = :name";
+            
+            $statement = $pdo->prepare($query);
+            $statement->bindValue('name', $albumName);
+            $statement->execute();
+
             $query = "DELETE FROM Album WHERE Name = :name";
 
             $statement = $pdo->prepare($query);
             $statement->bindValue('name', $albumName);
             $statement->execute();
+
           }
 
           function updateAlbum($albumName, $releaseDate){
