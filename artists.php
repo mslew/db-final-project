@@ -157,15 +157,27 @@
 
           function displayAll(){
             $pdo = grabPdo();
-            $query = "SELECT * FROM Artist";
+            $query = "SELECT a.Name ArtistName, a.DateFormed DateFormed, a.DateEnded DateEnded, a.Genre Genre FROM Artist a";
             $statement = $pdo->query($query);
             //echo "Rows selected = ".$statement->rowCount();
-            echo "<ul class='list-group'>";
+            echo "<div class='row'>";
 
             while($row = $statement->fetch()){
-                echo "<li class='list-group-item'>".$row['Name']." ".$row['DateFormed']." ".$row['DateEnded']." ".$row['Genre']."</li>";
+              echo "<div class='card' style='width: 18rem;'>
+              <div class='card-body'>
+                  <h5 class='card-title'>".$row['ArtistName']."</h5>
+                  <h6 class='card-subtitle mb-2 text-muted'>".$row['Genre']."</h6>";
+              if($row['DateEnded'] == NULL){
+                echo "<h6 class='card-subtitle mb-2 text-muted'>Still Active</h6>
+                </div>
+                </div>";
+              }else{
+                echo "<h6 class='card-subtitle mb-2 text-muted'>".$row['DateFormed']." - ".$row['DateEnded']."</h6>
+                </div>
+                </div>";
+              }
             }
-            echo "</ul>";
+            echo "</div>";
           }
           displayAll();
         ?>

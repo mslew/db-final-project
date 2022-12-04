@@ -40,6 +40,3 @@ git push
 ```
 
 **This assignment is due no later than 11:59 PM on Tuesday, December 13th.**
-
-### Credits
-This project is based on Dr. Klump's PHP MVC Framework. 

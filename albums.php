@@ -141,15 +141,20 @@
 
           function displayAll(){
             $pdo = grabPdo();
-            $query = "SELECT * FROM Album";
+            $query = "SELECT  al.Name AlbumName, al.ReleaseDate ReleaseDate, a.Name ArtistName FROM Album al JOIN ArtistAlbum aa ON al.AlbumID = aa.AlbumID JOIN Artist a ON aa.ArtistID = a.ArtistID";
             $statement = $pdo->query($query);
-            //echo "Rows selected = ".$statement->rowCount();
-            echo "<ul class='list-group'>";
+            echo "<div class='row'>";
 
             while($row = $statement->fetch()){
-                echo "<li class='list-group-item'>".$row['Name']." ".$row['ReleaseDate']." </li>";
+              echo "<div class='card' style='width: 18rem;'>
+              <div class='card-body'>
+                  <h5 class='card-title'>".$row['AlbumName']."</h5>
+                  <h6 class='card-subtitle mb-2 text-muted'>".$row['ArtistName']."</h6>
+                  <h6 class='card-subtitle mb-2 text-muted'>".$row['ReleaseDate']."</h6>
+                </div>
+              </div>";
             }
-            echo "</ul>";
+            echo "</div>";
           }
           displayAll();
         ?>
