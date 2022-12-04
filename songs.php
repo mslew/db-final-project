@@ -20,8 +20,7 @@
 
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav me-auto mb-2 mb-lg-0">
-          <a class="nav-link" aria-current="page" href="index.html">Home</a>
-          <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" aria-current="page" href="index.html">Home</a>
           <a class="nav-link" aria-current="players" href="artists.php">Artists</a>
           <a class="nav-link" aria-current="players" href="albums.php">Albums</a>
           <a class="nav-link" aria-current="players" href="songs.php">Songs</a>
