@@ -54,9 +54,10 @@ CREATE INDEX artist_name ON Artist (name);
 CREATE INDEX album_name ON Album (name);
 CREATE INDEX song_name ON Song (name);
 
+CREATE USER 'php_user'@'localhost' IDENTIFIED BY 'secure_password';
+GRANT SELECT, INSERT, UPDATE, DELETE ON music.* TO 'php_user'@'localhost';
 
-
-INSERT INTO Artist(Name, DateFormed, Genre) VALUES("Steely Dan", "1971-01-01", "Jazz Fusion, Yach Rock");
+INSERT INTO Artist(Name, DateFormed, Genre) VALUES("Steely Dan", "1971-01-01", "Jazz Fusion, Yacht Rock");
 
 INSERT INTO Album(Name, ReleaseDate) VALUES("Aja", "1977-09-23");
 INSERT INTO Album(Name, ReleaseDate) VALUES("Gaucho", "1980-11-21"); 
