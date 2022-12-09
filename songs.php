@@ -162,7 +162,6 @@
                         <h6 class='card-subtitle mb-2 text-muted'>".$row['SongLength']."</h6>
                     </div>
                 </div>";
-                "<li class='list-group-item'>".$row['SongName']." Length: ".$row['SongLength']." Album: ".$row['AlbumName']." By: ".$row['ArtistName']."</li>";
             }
             echo "</div>";
           }
