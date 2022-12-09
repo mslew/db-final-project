@@ -7,10 +7,10 @@ DROP TABLE IF EXISTS Artist;
 
 CREATE TABLE Artist(
     ArtistID SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    Name varchar(255),
-    DateFormed DATE,
+    Name varchar(255) NOT NULL,
+    DateFormed DATE NOT NULL,
     DateEnded DATE,
-    Genre varchar(255),
+    Genre varchar(255) NOT NULL,
     PRIMARY KEY(ArtistID)
 );
 
@@ -18,8 +18,8 @@ DROP TABLE IF EXISTS Album;
 
 CREATE TABLE Album(
     AlbumID SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    Name varchar(255),
-    ReleaseDate DATE,
+    Name varchar(255) NOT NULL,
+    ReleaseDate DATE NOT NULL,
     PRIMARY KEY(AlbumID)
 );
 
@@ -42,8 +42,8 @@ DROP TABLE IF EXISTS Song;
 CREATE TABLE Song(
     SongID SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
     AlbumID SMALLINT UNSIGNED NOT NULL,
-    Name varchar(255),
-    Length TIME,
+    Name varchar(255) NOT NULL,
+    Length TIME NOT NULL,
     PRIMARY KEY (SongID),
     CONSTRAINT fk_albumsongid FOREIGN KEY (AlbumID) REFERENCES Album (AlbumID)
     ON UPDATE CASCADE
@@ -53,6 +53,8 @@ CREATE TABLE Song(
 CREATE INDEX artist_name ON Artist (name);
 CREATE INDEX album_name ON Album (name);
 CREATE INDEX song_name ON Song (name);
+
+DROP USER IF EXISTS 'php_user'@'localhost';
 
 CREATE USER 'php_user'@'localhost' IDENTIFIED BY 'secure_password';
 GRANT SELECT, INSERT, UPDATE, DELETE ON music.* TO 'php_user'@'localhost';
